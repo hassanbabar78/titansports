@@ -42,12 +42,12 @@ const Admin = () => {
       const fileName = `${Math.random().toString(36).substring(2)}_${Date.now()}.${fileExt}`;
 
       const { error: uploadError } = await supabase.storage
-        .from('products')
+        .from('product-images')
         .upload(fileName, file);
 
       if (uploadError) throw uploadError;
 
-      const { data } = supabase.storage.from('products').getPublicUrl(fileName);
+      const { data } = supabase.storage.from('product-images').getPublicUrl(fileName);
       updateForm('image_url', data.publicUrl);
       toast.success('Image uploaded successfully!');
     } catch (error: any) {

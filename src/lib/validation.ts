@@ -56,20 +56,47 @@ export const checkoutSchema = z.object({
 });
 
 /** Map any thrown value to a safe, user-facing message. Never leak stack traces or internals. */
+// export function friendlyError(err: unknown, fallback = 'Something went wrong. Please try again.'): string {
+//   if (err instanceof z.ZodError) {
+//     return err.issues[0]?.message ?? fallback;
+//   }
+//   if (err instanceof Error) {
+//     const msg = err.message;
+//     // Allow a small set of known-safe auth messages through; otherwise mask.
+//     const safe = [
+//       'Invalid login credentials',
+//       'Email not confirmed',
+//       'User already registered',
+//       'Password should be at least',
+//     ];
+//     if (safe.some((s) => msg.includes(s))) return msg;
+//   }
+//   return fallback;
+// }
+
 export function friendlyError(err: unknown, fallback = 'Something went wrong. Please try again.'): string {
   if (err instanceof z.ZodError) {
     return err.issues[0]?.message ?? fallback;
   }
+
   if (err instanceof Error) {
     const msg = err.message;
-    // Allow a small set of known-safe auth messages through; otherwise mask.
-    const safe = [
-      'Invalid login credentials',
-      'Email not confirmed',
-      'User already registered',
-      'Password should be at least',
-    ];
-    if (safe.some((s) => msg.includes(s))) return msg;
+    // Use error codes where available (more reliable than message strings)
+    const code = (err as any)?.code ?? (err as any)?.status;
+
+    if (code === 'email_not_confirmed' || msg.includes('Email not confirmed')) {
+      return 'Please verify your email address before signing in. Check your inbox for the confirmation link.';
+    }
+    if (code === 'invalid_credentials' || msg.includes('Invalid login credentials')) {
+      return 'Incorrect email or password. Please try again.';
+    }
+    if (msg.includes('User already registered')) {
+      return 'An account with this email already exists. Please sign in instead.';
+    }
+    if (msg.includes('Password should be at least')) {
+      return msg; // Safe to pass through
+    }
   }
+
   return fallback;
 }
