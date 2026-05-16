@@ -24,7 +24,8 @@ const Header = () => {
     { to: '/about', label: 'About Us', scrollTo: null },
     { to: '/', label: 'Services', scrollTo: 'services' },
     { to: '/', label: 'Why Us', scrollTo: 'why-us' },
-    { to: '/', label: 'Contact', scrollTo: 'contact' },
+    // { to: '/', label: 'Contact', scrollTo: 'contact' },
+    { to: '/contact', label: 'Contact', scrollTo: null },
   ];
 
   const handleNavClick = (e: React.MouseEvent, to: string, scrollTo: string | null) => {
