@@ -1,0 +1,1 @@
+UPDATE auth.users SET email = 'saaib@admin.com' WHERE id = 'af5b7332-79fc-4ee6-b589-b9e81feb5c46';

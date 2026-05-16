@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Security headers (meta-equivalents). True HTTP headers (HSTS, X-Frame-Options) are
+         set at the edge by the Lovable hosting layer; these tags reinforce client behaviour. -->
+    <meta http-equiv="Content-Security-Policy" content="
+      default-src 'self';
+      script-src 'self' 'unsafe-inline' https://js.stripe.com https://cdn.gpteng.co;
+      style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+      font-src 'self' https://fonts.gstatic.com data:;
+      img-src 'self' data: blob: https:;
+      connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.stripe.com;
+      frame-src https://js.stripe.com https://hooks.stripe.com;
+      frame-ancestors 'none';
+      base-uri 'self';
+      form-action 'self';
+      object-src 'none';
+      upgrade-insecure-requests;
+    " />
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+
+    <title>Titan Sports — Premium Physical Boxing Gloves Shipped Worldwide</title>
+    <meta name="description" content="Titan Sports — Premium physical boxing gloves shipped worldwide. Shop Training, Sparring, Bag Work and Competition gloves with worldwide delivery.">
+    <meta name="author" content="Titan Sports" />
+    <link rel="icon" type="image/x-icon" href="/logo.jpeg">
+
+    
+    
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/logo.jpeg">
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="/logo.jpeg">
+    <meta property="og:title" content="Titan Sports — Premium Physical Boxing Gloves Shipped Worldwide">
+  <meta name="twitter:title" content="Titan Sports — Premium Physical Boxing Gloves Shipped Worldwide">
+  <meta property="og:description" content="Titan Sports — Premium physical boxing gloves shipped worldwide. Shop Training, Sparring, Bag Work and Competition gloves with worldwide delivery.">
+  <meta name="twitter:description" content="Titan Sports — Premium physical boxing gloves shipped worldwide. Shop Training, Sparring, Bag Work and Competition gloves with worldwide delivery.">
+</head>
+
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
