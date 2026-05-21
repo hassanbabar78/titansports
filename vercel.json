@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "public": true,
+  "outputDirectory": "dist",
+  "routes": [
+    {
+      "src": "/.well-known/acme-challenge/(.*)",
+      "dest": "/.well-known/acme-challenge/$1",
+      "headers": {
+        "Content-Type": "text/plain",
+        "Cache-Control": "public, max-age=0, must-revalidate"
+      }
+    }
+  ]
+}
