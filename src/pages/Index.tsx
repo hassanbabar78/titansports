@@ -1,5 +1,4 @@
 
-
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,14 +8,6 @@ import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import ProductCard from '@/components/ProductCard';
 import { useState, useEffect, useCallback } from 'react';
-
-const heroSlides = [
-  { image: '/products/product-1.jpeg' },
-  { image: '/products/product-2.jpeg' },
-  { image: '/products/product-3.jpeg' },
-  { image: '/products/product-5.jpeg' },
-  { image: '/products/product-7.jpeg' },
-];
 
 const categoryList = [
   { name: 'Boxing Gloves', slug: 'boxing-gloves' },
@@ -43,27 +34,68 @@ const Index = () => {
   const [reviewIndex, setReviewIndex] = useState(0);
   const [currentSlide, setCurrentSlide] = useState(0);
 
+  // Fetch random product images for hero slider
+  const { data: heroImages = [] } = useQuery({
+    queryKey: ['hero-images'],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from('products')
+        .select('image_url, name')
+        .eq('in_stock', true)
+        .not('image_url', 'is', null);
+      
+      if (!data || data.length === 0) {
+        return [
+          { image: '/products/product-1.jpeg', name: 'Titan Sports' },
+          { image: '/products/product-2.jpeg', name: 'Titan Sports' },
+          { image: '/products/product-3.jpeg', name: 'Titan Sports' },
+          { image: '/products/product-5.jpeg', name: 'Titan Sports' },
+          { image: '/products/product-7.jpeg', name: 'Titan Sports' },
+        ];
+      }
+      
+      const shuffled = [...data];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      
+      const selected = shuffled.slice(0, 7);
+      return selected.map(product => ({
+        image: product.image_url,
+        name: product.name,
+      }));
+    },
+    refetchInterval: 3600000,
+  });
+
   const nextSlide = useCallback(() => {
-    setCurrentSlide(prev => (prev + 1) % heroSlides.length);
-  }, []);
+    setCurrentSlide(prev => (prev + 1) % Math.max(heroImages.length, 1));
+  }, [heroImages.length]);
 
   useEffect(() => {
+    if (heroImages.length === 0) return;
     const timer = setInterval(nextSlide, 6000);
     return () => clearInterval(timer);
-  }, [nextSlide]);
+  }, [nextSlide, heroImages.length]);
+
+  // Reset current slide if it exceeds image count
+  useEffect(() => {
+    if (currentSlide >= heroImages.length && heroImages.length > 0) {
+      setCurrentSlide(0);
+    }
+  }, [heroImages.length, currentSlide]);
 
   // Fetch random product image per category
   const { data: categoryImages = {} } = useQuery({
     queryKey: ['category-images'],
     queryFn: async () => {
-      // Get ALL products with images
       const { data } = await supabase
         .from('products')
         .select('category, image_url')
         .eq('in_stock', true)
         .not('image_url', 'is', null);
       
-      // Group images by category
       const grouped: Record<string, string[]> = {};
       if (data) {
         for (const p of data) {
@@ -74,7 +106,6 @@ const Index = () => {
         }
       }
       
-      // Pick random image for each category
       const randomImages: Record<string, string> = {};
       for (const [category, images] of Object.entries(grouped)) {
         if (images.length > 0) {
@@ -107,38 +138,82 @@ const Index = () => {
 
   return (
     <div>
-      {/* Hero */}
-      <section className="relative h-screen flex items-center bg-primary text-primary-foreground overflow-hidden">
-        {heroSlides.map((slide, index) => (
-          <div key={index} className="absolute inset-0 transition-opacity duration-1000 ease-in-out" style={{ opacity: currentSlide === index ? 1 : 0 }}>
-            <img src={slide.image} alt="Boxing" className="w-full h-full object-cover opacity-30" />
+      {/* Hero section fetches Dynamic Product Images from Database */}
+      <section className="relative h-screen flex items-center overflow-hidden">
+        {heroImages.map((slide, index) => (
+          <div 
+            key={index} 
+            className="absolute inset-0 transition-opacity duration-1000 ease-in-out" 
+            style={{ opacity: currentSlide === index ? 1 : 0 }}
+          >
+            <div className="hero-image-wrapper absolute inset-0">
+              
+              <img 
+                src={slide.image} 
+                alt={slide.name} 
+                className="w-full h-full object-cover"
+                style={{
+                  filter: "brightness(0.8) contrast(1.08) saturate(1.12)",
+                  transform: currentSlide === index ? "scale(1.06)" : "scale(1)",
+                  transition: "transform 12s cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 0.5s ease"
+                }}
+                loading="lazy"
+              />
+            </div>
           </div>
         ))}
-        <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary/80 to-transparent z-[1]" />
+        
+        {heroImages.length === 0 && (
+          <div className="absolute inset-0 bg-gradient-to-r from-primary to-primary/80" />
+        )}
+        
+        {/* Gradient overlays for text readability */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent z-[1]" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-[1]" />
+        
         <div className="container mx-auto px-4 relative z-10 py-20">
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold uppercase tracking-tight mb-4 animate-fade-in">
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold uppercase tracking-tight mb-4 animate-fade-in text-white">
             Precision.<br />
             <span className="text-gold">Protection.</span><br />
             Performance.
           </h1>
-          <p className="text-lg md:text-xl text-muted-foreground max-w-lg mb-8">
+          <p className="text-lg md:text-xl text-white/80 max-w-lg mb-8">
             Premium boxing gloves engineered for champions. Built to protect. Designed to dominate.
           </p>
           <div className="flex flex-wrap gap-4">
-            <Button asChild className="bg-gold text-gold-foreground hover:bg-gold/90 font-bold uppercase tracking-wide px-8 py-6 text-base">
-              <Link to="/shop?category=men">Shop Men's</Link>
+            <Button asChild className="bg-gold text-black hover:bg-gold/90 font-bold uppercase tracking-wide px-8 py-6 text-base group">
+              <Link to="/shop?category=men" className="inline-flex items-center gap-2">
+                Shop Men's
+                <span className="inline-block transition-transform duration-500 group-hover:translate-x-3">→</span>
+              </Link>
             </Button>
-            <Button asChild variant="outline" className="border-gold text-gold hover:bg-gold hover:text-primary-foreground font-bold uppercase tracking-wide px-8 py-6 text-base transition-colors">
-              <Link to="/shop?category=women">Shop Women's</Link>
+            <Button asChild variant="outline" className="border-gold text-gold hover:bg-gold hover:text-black font-bold uppercase tracking-wide px-8 py-6 text-base transition-colors group">
+              <Link to="/shop?category=women" className="inline-flex items-center gap-2">
+                Shop Women's
+                <span className="inline-block transition-transform duration-500 group-hover:translate-x-3">→</span>
+              </Link>
             </Button>
           </div>
+          
+         
+         
         </div>
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex gap-2">
-          {heroSlides.map((_, i) => (
-            <button key={i} onClick={() => setCurrentSlide(i)}
-              className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${currentSlide === i ? 'bg-gold w-8' : 'bg-primary-foreground/40 hover:bg-primary-foreground/60'}`} />
-          ))}
-        </div>
+         {heroImages.length > 1 && (
+            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex items-center gap-2">
+              {heroImages.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setCurrentSlide(i)}
+                  className={`rounded-full transition-all duration-500 ${
+                    currentSlide === i
+                      ? 'bg-gold w-8 h-2'
+                      : 'bg-white/50 w-2 h-2 hover:bg-white/80'
+                  }`}
+                  aria-label={`Go to slide ${i + 1}`}
+                />
+              ))}
+            </div>
+          )}
       </section>
 
       {/* Shop by Category */}
@@ -151,8 +226,8 @@ const Index = () => {
               return (
                 <Link key={c.slug} to={`/shop?category=${c.slug}`} className="group relative aspect-square rounded-lg overflow-hidden">
                   <img src={img} alt={c.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                  <div className="absolute inset-0 bg-primary/50 group-hover:bg-primary/40 transition-colors flex items-center justify-center">
-                    <span className="text-primary-foreground text-lg md:text-2xl font-bold uppercase tracking-wide text-center px-2">{c.name}</span>
+                  <div className="absolute inset-0 bg-black/50 group-hover:bg-black/40 transition-colors flex items-center justify-center">
+                    <span className="text-white text-lg md:text-2xl font-bold uppercase tracking-wide text-center px-2">{c.name}</span>
                   </div>
                 </Link>
               );
@@ -170,8 +245,8 @@ const Index = () => {
               {displayProducts.map((p: any) => <ProductCard key={p.id} {...p} />)}
             </div>
             <div className="text-center mt-8">
-              <Button asChild variant="outline" className="border-gold text-gold hover:bg-gold hover:text-primary-foreground uppercase tracking-wide transition-colors">
-                <Link to="/shop">View All Products</Link>
+              <Button asChild variant="outline" className="border-gold text-gold hover:bg-gold hover:text-black uppercase tracking-wide transition-colors">
+                <Link to="/shop">View All Products →</Link>
               </Button>
             </div>
           </div>
@@ -257,7 +332,7 @@ const Index = () => {
               <Input type="email" placeholder="Your Email" required />
               <Input placeholder="Subject" />
               <Textarea placeholder="Your Message" rows={5} required />
-              <Button type="submit" className="w-full bg-gold text-gold-foreground hover:bg-gold/90 font-bold uppercase tracking-wide">Send Message</Button>
+              <Button type="submit" className="w-full bg-gold text-black hover:bg-gold/90 font-bold uppercase tracking-wide">Send Message</Button>
             </form>
           </div>
         </div>
