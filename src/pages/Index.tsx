@@ -1,3 +1,5 @@
+
+
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -16,11 +18,11 @@ const heroSlides = [
   { image: '/products/product-7.jpeg' },
 ];
 
-const collections = [
-  { name: 'Training Gloves', image: '/products/product-1.jpeg', slug: 'training' },
-  { name: 'Bag Gloves', image: '/products/product-3.jpeg', slug: 'bag' },
-  { name: 'Sparring', image: '/products/product-5.jpeg', slug: 'sparring' },
-  { name: 'Competition Gloves', image: '/products/product-7.jpeg', slug: 'competition' },
+const categoryList = [
+  { name: 'Boxing Gloves', slug: 'boxing-gloves' },
+  { name: 'Boxing Sets', slug: 'boxing-sets' },
+  { name: 'Kids Corner', slug: 'kids-corner' },
+  { name: 'Horse Hair Gloves', slug: 'horse-hair-gloves' },
 ];
 
 const testimonials = [
@@ -31,7 +33,7 @@ const testimonials = [
 ];
 
 const whyApex = [
-  { icon: Package, title: 'Premium Physical Gloves', desc: 'Genuine leather construction built to last' },
+  { icon: Package, title: 'Premium Gloves', desc: 'Genuine leather construction built to last' },
   { icon: Globe, title: 'Ships Worldwide', desc: 'We deliver to 50+ countries internationally' },
   { icon: Lock, title: 'Secure Checkout', desc: '256-bit SSL encrypted payments' },
   { icon: Truck, title: 'Real Products, Real Delivery', desc: 'Every order physically packaged & shipped' },
@@ -49,6 +51,41 @@ const Index = () => {
     const timer = setInterval(nextSlide, 6000);
     return () => clearInterval(timer);
   }, [nextSlide]);
+
+  // Fetch random product image per category
+  const { data: categoryImages = {} } = useQuery({
+    queryKey: ['category-images'],
+    queryFn: async () => {
+      // Get ALL products with images
+      const { data } = await supabase
+        .from('products')
+        .select('category, image_url')
+        .eq('in_stock', true)
+        .not('image_url', 'is', null);
+      
+      // Group images by category
+      const grouped: Record<string, string[]> = {};
+      if (data) {
+        for (const p of data) {
+          if (p.category && p.image_url) {
+            if (!grouped[p.category]) grouped[p.category] = [];
+            grouped[p.category].push(p.image_url);
+          }
+        }
+      }
+      
+      // Pick random image for each category
+      const randomImages: Record<string, string> = {};
+      for (const [category, images] of Object.entries(grouped)) {
+        if (images.length > 0) {
+          const randomIndex = Math.floor(Math.random() * images.length);
+          randomImages[category] = images[randomIndex];
+        }
+      }
+      
+      return randomImages;
+    },
+  });
 
   const { data: bestsellers = [] } = useQuery({
     queryKey: ['bestsellers'],
@@ -104,19 +141,22 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Collections */}
+      {/* Shop by Category */}
       <section className="py-16 bg-background">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold uppercase tracking-tight text-center mb-10">Shop by Category</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {collections.map(c => (
-              <Link key={c.slug} to={`/shop?category=${c.slug}`} className="group relative aspect-square rounded-lg overflow-hidden">
-                <img src={c.image} alt={c.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                <div className="absolute inset-0 bg-primary/50 group-hover:bg-primary/40 transition-colors flex items-center justify-center">
-                  <span className="text-primary-foreground text-lg md:text-2xl font-bold uppercase tracking-wide text-center px-2">{c.name}</span>
-                </div>
-              </Link>
-            ))}
+            {categoryList.map(c => {
+              const img = categoryImages[c.slug];
+              return (
+                <Link key={c.slug} to={`/shop?category=${c.slug}`} className="group relative aspect-square rounded-lg overflow-hidden">
+                  <img src={img} alt={c.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  <div className="absolute inset-0 bg-primary/50 group-hover:bg-primary/40 transition-colors flex items-center justify-center">
+                    <span className="text-primary-foreground text-lg md:text-2xl font-bold uppercase tracking-wide text-center px-2">{c.name}</span>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -138,11 +178,11 @@ const Index = () => {
         </section>
       )}
 
-      {/* WHY APEX STORE */}
+      {/* Why Titan Sports */}
       <section id="why-us" className="py-16 bg-background scroll-mt-20">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold uppercase tracking-tight text-center mb-3">Why Titan Sports?</h2>
-          <p className="text-center text-muted-foreground mb-10 max-w-xl mx-auto">A real, physical-goods boxing brand built on quality, transparency, and worldwide delivery.</p>
+          <p className="text-center text-muted-foreground mb-10 max-w-xl mx-auto">A boxing brand built on quality, transparency, and worldwide delivery.</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {whyApex.map(({ icon: Icon, title, desc }) => (
               <div key={title} className="bg-card border rounded-xl p-6 text-center hover:shadow-lg transition-shadow">
@@ -222,7 +262,6 @@ const Index = () => {
           </div>
         </div>
       </section>
-
     </div>
   );
 };

@@ -54,7 +54,8 @@ const Header = () => {
     <header className="sticky top-0 z-50 bg-primary text-primary-foreground shadow-lg">
       <div className="container mx-auto flex items-center justify-between px-4 py-3">
         <Link to="/" className="flex items-center gap-2">
-          <img src="/logo.jpeg" alt="Titan Sports" className="h-10 w-10 rounded-full object-cover" />
+          {/* <img src="/logo.jpeg" alt="Titan Sports" className="h-10 w-10 rounded-full object-cover" /> */}
+          <img src="/logo.jpeg" alt="Titan Sports" className="h-12 w-12 rounded-full object-cover" />
           <span className="text-xl font-bold tracking-tight">Titan Sports</span>
         </Link>
 

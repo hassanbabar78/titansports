@@ -19,10 +19,11 @@ const Footer = () => {
       <div className="container mx-auto px-4 py-12 grid grid-cols-2 md:grid-cols-5 gap-8">
         <div className="col-span-2">
           <div className="flex items-center gap-2 mb-4">
-            <img src="/logo.jpeg" alt="Titan Sports" className="h-10 w-10 rounded-full" />
+            {/* <img src="/logo.jpeg" alt="Titan Sports" className="h-10 w-10 rounded-full" /> */}
+            <img src="/logo.jpeg" alt="Titan Sports" className="h-10 w-10 rounded-full object-cover" />
             <span className="font-bold tracking-tight">Titan Sports</span>
           </div>
-          <p className="text-sm text-muted-foreground mb-4">Premium physical boxing equipment shipped worldwide. Real products, real delivery.</p>
+          <p className="text-sm text-muted-foreground mb-4">Premium boxing equipment shipped worldwide. Real products, real delivery.</p>
           <div className="flex gap-3">
             <a href="https://instagram.com/titan_sports_1" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="bg-primary-foreground/10 p-2 rounded-full hover:bg-gold hover:text-primary-foreground transition-colors">
               <Instagram className="h-4 w-4" />

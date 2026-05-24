@@ -1,3 +1,5 @@
+
+
 import { useState, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
@@ -6,10 +8,14 @@ import ProductCard from '@/components/ProductCard';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
 
+const GENDER_FILTERS = ['men', 'women'];
+
 const Shop = () => {
   const [searchParams] = useSearchParams();
   const initialCategory = searchParams.get('category') || '';
   const [sortBy, setSortBy] = useState('newest');
+
+  const isGenderFilter = GENDER_FILTERS.includes(initialCategory);
 
   const { data: products = [], isLoading } = useQuery({
     queryKey: ['products'],
@@ -21,8 +27,14 @@ const Shop = () => {
 
   const filtered = useMemo(() => {
     let result = [...products] as any[];
-    if (initialCategory) result = result.filter(p => p.category === initialCategory);
-
+    if (initialCategory) {
+      if (isGenderFilter) {
+        // result = result.filter(p => p.gender === initialCategory || p.gender === 'unisex');
+        result = result.filter(p => p.gender === initialCategory);
+      } else {
+        result = result.filter(p => p.category === initialCategory);
+      }
+    }
     switch (sortBy) {
       case 'price-asc': result.sort((a, b) => a.price - b.price); break;
       case 'price-desc': result.sort((a, b) => b.price - a.price); break;
@@ -31,11 +43,17 @@ const Shop = () => {
       default: result.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
     }
     return result;
-  }, [products, initialCategory, sortBy]);
+  }, [products, initialCategory, sortBy, isGenderFilter]);
+
+  const pageTitle = isGenderFilter
+    ? `${initialCategory.charAt(0).toUpperCase() + initialCategory.slice(1)}'s Boxing Gloves`
+    : initialCategory
+      ? initialCategory.split('-').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
+      : 'Shop All Products';
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold uppercase tracking-tight text-center mb-8">Shop Boxing Gloves</h1>
+      <h1 className="text-3xl font-bold uppercase tracking-tight text-center mb-8">{pageTitle}</h1>
       <div className="flex items-center justify-between mb-8">
         <p className="text-sm text-muted-foreground">{filtered.length} Products</p>
         <Select value={sortBy} onValueChange={setSortBy}>
@@ -51,13 +69,7 @@ const Shop = () => {
           </SelectContent>
         </Select>
       </div>
-
       {isLoading ? (
-        // <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        //   {Array.from({ length: 8 }).map((_, i) => (
-        //     <div key={i} className="aspect-square bg-secondary/50 animate-pulse rounded-lg" />
-        //   ))}
-        // </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {Array.from({ length: 8 }).map((_, i) => (
             <div key={i} className="flex flex-col gap-2">

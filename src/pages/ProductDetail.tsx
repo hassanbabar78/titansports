@@ -1,9 +1,10 @@
+
 import { useParams, Link } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Star, Minus, Plus, ShoppingBag } from 'lucide-react';
+import { Star, Minus, Plus, ShoppingBag, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useCart } from '@/contexts/CartContext';
 import { useState } from 'react';
 import ProductCard from '@/components/ProductCard';
@@ -14,7 +15,7 @@ import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { Skeleton } from '@/components/ui/skeleton';
 
-const weights = ['8oz', '10oz', '12oz', '14oz', '16oz'];
+const weights = ['4oz', '6oz', '8oz', '10oz', '12oz', '14oz', '16oz', '18oz', '20oz'];
 
 const sizeGuide = [
   { hand: '6"-7"', weight: '8oz-10oz', use: 'Speed work, cardio' },
@@ -105,20 +106,56 @@ const ProductDetail = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="grid md:grid-cols-2 gap-8 mb-16">
-        {/* Images */}
-        <div>
-          <div className="aspect-square rounded-lg overflow-hidden bg-secondary/30 mb-4">
-            <img src={images[selectedImage] || '/placeholder.svg'} alt={product.name} className="w-full h-full object-cover" />
-          </div>
+        {/* Images — sleek carousel, no thumbnails */}
+        <div className="relative aspect-square rounded-2xl overflow-hidden bg-secondary/30 group shadow-lg">
+          {/* Image with smooth fade transition */}
+          <img
+            key={selectedImage}
+            src={images[selectedImage] || '/placeholder.svg'}
+            alt={product.name}
+            className="w-full h-full object-cover transition-opacity duration-300"
+          />
+
           {images.length > 1 && (
-            <div className="flex gap-2">
-              {images.map((img, i) => (
-                <button key={i} onClick={() => setSelectedImage(i)}
-                  className={`w-16 h-16 rounded border-2 overflow-hidden ${i === selectedImage ? 'border-gold' : 'border-border'}`}>
-                  <img src={img} alt="" className="w-full h-full object-cover" />
-                </button>
-              ))}
-            </div>
+            <>
+              {/* Previous button */}
+              <button
+                onClick={() => setSelectedImage((selectedImage - 1 + images.length) % images.length)}
+                className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-primary rounded-full w-10 h-10 flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-200 hover:scale-110"
+                aria-label="Previous image"
+              >
+                <ChevronLeft className="h-5 w-5" />
+              </button>
+
+              {/* Next button */}
+              <button
+                onClick={() => setSelectedImage((selectedImage + 1) % images.length)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-primary rounded-full w-10 h-10 flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-200 hover:scale-110"
+                aria-label="Next image"
+              >
+                <ChevronRight className="h-5 w-5" />
+              </button>
+
+              {/* Image counter top-right */}
+              <div className="absolute top-3 right-3 bg-black/50 text-white text-xs font-medium px-2.5 py-1 rounded-full backdrop-blur-sm">
+                {selectedImage + 1} / {images.length}
+              </div>
+
+              {/* Dot indicators bottom */}
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 items-center">
+                {images.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setSelectedImage(i)}
+                    className={`rounded-full transition-all duration-300 ${
+                      i === selectedImage
+                        ? 'bg-white w-5 h-2'
+                        : 'bg-white/50 hover:bg-white/80 w-2 h-2'
+                    }`}
+                  />
+                ))}
+              </div>
+            </>
           )}
         </div>
 
@@ -210,7 +247,7 @@ const ProductDetail = () => {
             <p className="mb-4">{product.description || 'Premium boxing gloves designed for optimal performance and protection. Features multi-layered foam padding, reinforced wrist support, and genuine leather construction for durability.'}</p>
             <ul className="list-disc list-inside space-y-2 text-primary-foreground/80 mb-4">
               <li><strong>Material:</strong> Genuine leather (synthetic leather options available)</li>
-              <li><strong>Weight options:</strong> 8oz, 10oz, 12oz, 14oz, 16oz</li>
+              <li><strong>Weight options:</strong> 4oz, 6oz, 8oz, 10oz, 12oz, 14oz, 16oz, 18oz, 20oz</li>
               <li><strong>Recommended use:</strong> Training, sparring, bag work, or competition</li>
               <li>Multi-layer foam padding for superior shock absorption</li>
               <li>Reinforced wrist support with secure closure</li>
