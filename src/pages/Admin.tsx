@@ -555,51 +555,108 @@ const Admin = () => {
 
         {/* Order details dialog */}
         <Dialog open={!!selectedOrder} onOpenChange={(open) => { if (!open) { setSelectedOrder(null); setOrderItems([]); } }}>
-          <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto bg-primary text-primary-foreground border-primary-foreground/20">
-            <DialogHeader>
-              <DialogTitle className="text-gold">Order Details</DialogTitle>
-            </DialogHeader>
+          <DialogContent className="max-w-lg p-0 gap-0 bg-[#111] border border-white/10 rounded-2xl overflow-hidden shadow-2xl max-h-[90vh] flex flex-col">
+            {/* Header */}
+            <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-[#1a1a1a] shrink-0">
+              <div>
+                <h2 className="text-base font-bold text-white tracking-tight">Order Details</h2>
+                {selectedOrder && <p className="text-xs text-white/50 font-mono mt-0.5">#{selectedOrder.id.toUpperCase()}</p>}
+              </div>
+              <div className="flex items-center gap-2">
+                {selectedOrder && <span className="text-xs bg-gold/20 text-gold px-3 py-1 rounded-full font-semibold capitalize">{selectedOrder.status}</span>}
+              </div>
+            </div>
+
             {selectedOrder && (
-              <div className="space-y-4 text-sm">
+              <div className="overflow-y-auto flex-1 px-6 py-5 space-y-5">
+
+                {/* Order meta grid */}
                 <div className="grid grid-cols-2 gap-3">
-                  <div><p className="text-primary-foreground/60 text-xs uppercase">Order ID</p><p className="font-mono text-xs break-all">{selectedOrder.id}</p></div>
-                  <div><p className="text-primary-foreground/60 text-xs uppercase">Date</p><p>{new Date(selectedOrder.created_at).toLocaleString()}</p></div>
-                  <div><p className="text-primary-foreground/60 text-xs uppercase">Status</p><span className="bg-gold/20 text-gold text-xs px-2 py-1 rounded-full capitalize inline-block mt-1">{selectedOrder.status}</span></div>
-                  <div><p className="text-primary-foreground/60 text-xs uppercase">Payment</p><span className="bg-primary-foreground/10 text-primary-foreground/80 text-xs px-2 py-1 rounded-full capitalize inline-block mt-1">{selectedOrder.payment_status}</span></div>
-                  <div><p className="text-primary-foreground/60 text-xs uppercase">Method</p><p className="capitalize">{selectedOrder.payment_method}</p></div>
-                  <div><p className="text-primary-foreground/60 text-xs uppercase">Shipping</p><p className="capitalize">{selectedOrder.shipping_method}</p></div>
+                  {[
+                    { label: 'Date', value: new Date(selectedOrder.created_at).toLocaleString() },
+                    { label: 'Payment', value: selectedOrder.payment_status, badge: true, color: 'green' },
+                    { label: 'Method', value: selectedOrder.payment_method },
+                    { label: 'Shipping', value: selectedOrder.shipping_method },
+                  ].map(({ label, value, badge, color }) => (
+                    <div key={label} className="bg-white/5 rounded-xl px-4 py-3 border border-white/5">
+                      <p className="text-[10px] text-white/30 uppercase tracking-wider mb-1">{label}</p>
+                      {badge ? (
+                        <span className="text-xs bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full capitalize font-medium">{value}</span>
+                      ) : (
+                        <p className="text-sm text-white capitalize font-medium">{value}</p>
+                      )}
+                    </div>
+                  ))}
                 </div>
+
+                {/* Shipping address */}
                 {selectedOrder.shipping_address && Object.keys(selectedOrder.shipping_address).length > 0 && (
-                  <div className="border-t border-primary-foreground/10 pt-3">
-                    <p className="text-gold text-xs uppercase font-semibold mb-2">Shipping Address</p>
-                    <div className="text-primary-foreground/80 space-y-0.5">
-                      {selectedOrder.shipping_address.full_name && <p>{selectedOrder.shipping_address.full_name}</p>}
-                      {selectedOrder.shipping_address.address && <p>{selectedOrder.shipping_address.address}</p>}
-                      {(selectedOrder.shipping_address.city || selectedOrder.shipping_address.zip) && <p>{selectedOrder.shipping_address.city} {selectedOrder.shipping_address.zip}</p>}
-                      {selectedOrder.shipping_address.country && <p>{selectedOrder.shipping_address.country}</p>}
+                  <div className="bg-white/5 rounded-xl p-4 border border-white/5">
+                    <p className="text-[10px] text-gold/70 uppercase tracking-wider font-semibold mb-3">Shipping Address</p>
+                    <div className="space-y-1">
+                      {(selectedOrder.shipping_address.firstName || selectedOrder.shipping_address.lastName || selectedOrder.shipping_address.full_name) && (
+                        <p className="text-sm font-semibold text-white">
+                          {selectedOrder.shipping_address.full_name || `${selectedOrder.shipping_address.firstName || ''} ${selectedOrder.shipping_address.lastName || ''}`.trim()}
+                        </p>
+                      )}
+                      {selectedOrder.shipping_address.email && (
+                        <p className="text-xs text-white/50">{selectedOrder.shipping_address.email}</p>
+                      )}
+                      {selectedOrder.shipping_address.address && (
+                        <p className="text-sm text-white/70">{selectedOrder.shipping_address.address}</p>
+                      )}
+                      {(selectedOrder.shipping_address.city || selectedOrder.shipping_address.zip) && (
+                        <p className="text-sm text-white/70">
+                          {selectedOrder.shipping_address.city}{selectedOrder.shipping_address.state ? `, ${selectedOrder.shipping_address.state}` : ''} {selectedOrder.shipping_address.zip}
+                        </p>
+                      )}
+                      {selectedOrder.shipping_address.country && (
+                        <p className="text-sm text-white/70">{selectedOrder.shipping_address.country}</p>
+                      )}
                     </div>
                   </div>
                 )}
-                <div className="border-t border-primary-foreground/10 pt-3">
-                  <p className="text-gold text-xs uppercase font-semibold mb-2">Items</p>
+
+                {/* Items */}
+                <div>
+                  <p className="text-[10px] text-white/50 uppercase tracking-wider font-semibold mb-3">Items Ordered</p>
                   {orderItemsLoading ? (
-                    <div className="space-y-3">{Array.from({ length: 3 }).map((_, i) => <div key={i} className="flex items-center gap-3"><Skeleton className="w-12 h-12 rounded-lg shrink-0" /><div className="flex-1 space-y-2"><Skeleton className="h-4 w-3/4" /><Skeleton className="h-3 w-1/2" /></div><Skeleton className="h-4 w-12" /></div>)}</div>
-                  ) : orderItems.length === 0 ? <p className="text-primary-foreground/60">No items found.</p> : (
+                    <div className="space-y-3">
+                      {Array.from({ length: 2 }).map((_, i) => (
+                        <div key={i} className="flex items-center gap-3">
+                          <Skeleton className="w-14 h-14 rounded-xl shrink-0" />
+                          <div className="flex-1 space-y-2">
+                            <Skeleton className="h-4 w-3/4" />
+                            <Skeleton className="h-3 w-1/3" />
+                          </div>
+                          <Skeleton className="h-5 w-14" />
+                        </div>
+                      ))}
+                    </div>
+                  ) : orderItems.length === 0 ? (
+                    <p className="text-white/50 text-sm">No items found.</p>
+                  ) : (
                     <div className="space-y-2">
                       {orderItems.map((it: any) => (
-                        <div key={it.id} className="flex items-center gap-3 bg-primary-foreground/5 rounded-lg p-2">
-                          <img src={it.products?.image_url || '/placeholder.svg'} alt="" className="w-12 h-12 object-cover rounded" />
-                          <div className="flex-1 min-w-0"><p className="font-medium truncate">{it.products?.name || 'Product'}</p><p className="text-xs text-primary-foreground/60">Qty: {it.quantity}{it.weight ? ` · ${it.weight}` : ''}</p></div>
-                          <p className="font-semibold text-gold">${Number(it.price).toFixed(2)}</p>
+                        <div key={it.id} className="flex items-center gap-3 bg-white/5 rounded-xl p-3 border border-white/5">
+                          <img src={it.products?.image_url || '/placeholder.svg'} alt="" className="w-14 h-14 object-cover rounded-lg shrink-0" />
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium text-white truncate">{it.products?.name || 'Product'}</p>
+                            <p className="text-xs text-white/60 mt-0.5">Qty: {it.quantity}{it.weight ? ` · ${it.weight}` : ''}</p>
+                          </div>
+                          <p className="text-sm font-bold text-gold shrink-0">${Number(it.price).toFixed(2)}</p>
                         </div>
                       ))}
                     </div>
                   )}
                 </div>
-                <div className="border-t border-primary-foreground/10 pt-3 flex justify-between items-center">
-                  <span className="text-primary-foreground/70 uppercase text-xs">Total</span>
-                  <span className="text-gold text-xl font-bold">${Number(selectedOrder.total).toFixed(2)}</span>
+
+                {/* Total */}
+                <div className="bg-gold/10 border border-gold/20 rounded-xl px-5 py-4 flex justify-between items-center">
+                  <span className="text-white/70 text-sm uppercase tracking-wider">Order Total</span>
+                  <span className="text-gold text-2xl font-bold">${Number(selectedOrder.total).toFixed(2)}</span>
                 </div>
+
               </div>
             )}
           </DialogContent>
