@@ -84,26 +84,6 @@ const ProductDetail = () => {
     },
   });
 
-  // if (isLoading) return <div className="container mx-auto px-4 py-20 text-center">Loading...</div>;
-  if (isLoading) return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="grid md:grid-cols-2 gap-8 mb-16">
-        <Skeleton className="aspect-square w-full rounded-lg" />
-        <div className="space-y-4">
-          <Skeleton className="h-6 w-24" />
-          <Skeleton className="h-10 w-3/4" />
-          <Skeleton className="h-5 w-32" />
-          <Skeleton className="h-8 w-28" />
-          <Skeleton className="h-10 w-40" />
-          <Skeleton className="h-12 w-full" />
-        </div>
-      </div>
-    </div>
-  );
-  if (!product) return <div className="container mx-auto px-4 py-20 text-center">Product not found</div>;
-
-  const images = [product.image_url, ...(product.images || [])].filter(Boolean);
-  const price = product.sale_price || product.price;
 
   useEffect(() => {
     if (product) {
@@ -143,6 +123,29 @@ const ProductDetail = () => {
     document.head.appendChild(script);
     return () => { document.head.removeChild(script); };
   }, [product]);
+
+  // if (isLoading) return <div className="container mx-auto px-4 py-20 text-center">Loading...</div>;
+  if (isLoading) return (
+    <div className="container mx-auto px-4 py-8">
+      <div className="grid md:grid-cols-2 gap-8 mb-16">
+        <Skeleton className="aspect-square w-full rounded-lg" />
+        <div className="space-y-4">
+          <Skeleton className="h-6 w-24" />
+          <Skeleton className="h-10 w-3/4" />
+          <Skeleton className="h-5 w-32" />
+          <Skeleton className="h-8 w-28" />
+          <Skeleton className="h-10 w-40" />
+          <Skeleton className="h-12 w-full" />
+        </div>
+      </div>
+    </div>
+  );
+  if (!product) return <div className="container mx-auto px-4 py-20 text-center">Product not found</div>;
+
+  const images = [product.image_url, ...(product.images || [])].filter(Boolean);
+  const price = product.sale_price || product.price;
+
+  
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -295,7 +298,7 @@ const ProductDetail = () => {
               <li>Breathable mesh palm for ventilation</li>
               <li>Thumb-lock design for injury prevention</li>
             </ul>
-            <p className="text-sm text-gold">📦 This is a physical product shipped to your door — not a digital item.</p>
+            <p className="text-sm text-gold">This is a product shipped to your door.</p>
           </TabsContent>
           <TabsContent value="size-guide" className="py-6">
             <div className="overflow-x-auto">
@@ -395,3 +398,5 @@ const ProductDetail = () => {
 };
 
 export default ProductDetail;
+
+
