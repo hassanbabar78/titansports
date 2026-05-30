@@ -1,4 +1,3 @@
-document.title = "About Us | Ring Storm Sports";
 
 const About = () => (
   <div className="container mx-auto px-4 py-16 max-w-3xl">

@@ -86,15 +86,6 @@ const ProductDetail = () => {
 
 
   useEffect(() => {
-    if (product) {
-      document.title = `${product.name} | Ring Storm Sports`;
-    }
-    return () => {
-      document.title = 'Ring Storm Sports | Premium Boxing Gloves & Equipment';
-    };
-  }, [product]);
-
-  useEffect(() => {
     if (!product) return;
     const script = document.createElement('script');
     script.type = 'application/ld+json';

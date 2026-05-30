@@ -1,5 +1,4 @@
 
-document.title = "Contact Us | Ring Storm Sports";
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
