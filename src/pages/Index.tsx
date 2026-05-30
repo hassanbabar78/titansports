@@ -46,11 +46,11 @@ const Index = () => {
       
       if (!data || data.length === 0) {
         return [
-          { image: '/products/product-1.jpeg', name: 'Titan Sports' },
-          { image: '/products/product-2.jpeg', name: 'Titan Sports' },
-          { image: '/products/product-3.jpeg', name: 'Titan Sports' },
-          { image: '/products/product-5.jpeg', name: 'Titan Sports' },
-          { image: '/products/product-7.jpeg', name: 'Titan Sports' },
+          { image: '/products/product-1.jpeg', name: 'Ring Storm Sports' },
+          { image: '/products/product-2.jpeg', name: 'Ring Storm Sports' },
+          { image: '/products/product-3.jpeg', name: 'Ring Storm Sports' },
+          { image: '/products/product-5.jpeg', name: 'Ring Storm Sports' },
+          { image: '/products/product-7.jpeg', name: 'Ring Storm Sports' },
         ];
       }
       
@@ -253,10 +253,10 @@ const Index = () => {
         </section>
       )}
 
-      {/* Why Titan Sports */}
+      {/* Why Ring Storm Sports */}
       <section id="why-us" className="py-16 bg-background scroll-mt-20">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold uppercase tracking-tight text-center mb-3">Why Titan Sports?</h2>
+          <h2 className="text-3xl font-bold uppercase tracking-tight text-center mb-3">Why Ring Storm Sports?</h2>
           <p className="text-center text-muted-foreground mb-10 max-w-xl mx-auto">A boxing brand built on quality, transparency, and worldwide delivery.</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {whyApex.map(({ icon: Icon, title, desc }) => (
@@ -309,7 +309,7 @@ const Index = () => {
                 <div className="bg-gold/10 p-3 rounded-full"><Mail className="h-5 w-5 text-gold" /></div>
                 <div>
                   <h3 className="font-semibold uppercase text-sm mb-1">Email</h3>
-                  <p className="text-sm text-muted-foreground">support@titansports.com</p>
+                  <p className="text-sm text-muted-foreground">support@ringstormsports.com</p>
                 </div>
               </div>
               <div className="flex items-start gap-4">

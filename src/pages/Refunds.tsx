@@ -9,13 +9,13 @@ const Refunds = () => (
       <section><h2 className="text-xl font-bold text-gold mb-2">Refund Processing</h2>
         <p>Once we receive and inspect your return, refunds are issued to your original payment method within <strong>5–7 business days</strong>. Bank processing may add additional time.</p></section>
       <section><h2 className="text-xl font-bold text-gold mb-2">Exchanges</h2>
-        <p>We offer free exchanges for size or weight within 30 days. Contact <span className="text-gold">support@titansports.com</span> with your order number to initiate.</p></section>
+        <p>We offer free exchanges for size or weight within 30 days. Contact <span className="text-gold">support@ringstormsports.com</span> with your order number to initiate.</p></section>
       <section><h2 className="text-xl font-bold text-gold mb-2">Damaged or Defective Goods</h2>
         <p>If your gloves arrive damaged or defective, contact us within 7 days of delivery with photos. We will arrange a replacement or full refund — including return shipping — at no cost to you.</p></section>
       <section><h2 className="text-xl font-bold text-gold mb-2">Non-Returnable Items</h2>
         <p>Items that have been used, washed, or have damaged packaging cannot be returned for hygiene and safety reasons.</p></section>
       <section><h2 className="text-xl font-bold text-gold mb-2">How to Initiate a Return</h2>
-        <p>Email <span className="text-gold">support@titansports.com</span> with your order number and reason for return. We will respond within 24–48 business hours with instructions.</p></section>
+        <p>Email <span className="text-gold">support@ringstormsports.com</span> with your order number and reason for return. We will respond within 24–48 business hours with instructions.</p></section>
     </div>
   </div>
 );

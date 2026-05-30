@@ -20,8 +20,8 @@ const Footer = () => {
         <div className="col-span-2">
           <div className="flex items-center gap-2 mb-4">
             {/* <img src="/logo.jpeg" alt="Titan Sports" className="h-10 w-10 rounded-full" /> */}
-            <img src="/logo.jpeg" alt="Titan Sports" className="h-10 w-10 rounded-full object-cover" />
-            <span className="font-bold tracking-tight">Titan Sports</span>
+            <img src="/logo.jpeg" alt="Ring Storm Sports" className="h-10 w-10 rounded-full object-cover" />
+            <span className="font-bold tracking-tight">Ring Storm Sports</span>
           </div>
           <p className="text-sm text-muted-foreground mb-4">Premium boxing equipment shipped worldwide. Real products, real delivery.</p>
           <div className="flex gap-3">
@@ -77,7 +77,7 @@ const Footer = () => {
       </div>
 
       <div className="border-t border-border/20 py-4 text-center text-xs text-muted-foreground">
-        <p>© {new Date().getFullYear()} Titan Sports. All rights reserved. | SSL Secured | Visa • Mastercard</p>
+        <p>© {new Date().getFullYear()} Ring Storm Sports. All rights reserved. | SSL Secured | Visa • Mastercard</p>
       </div>
     </footer>
   );

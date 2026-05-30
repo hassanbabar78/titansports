@@ -84,7 +84,7 @@ const Checkout = () => {
       <div className="container mx-auto px-4 py-8 max-w-5xl">
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
-            <img src="/logo.jpeg" alt="Titan Sports" className="h-8 w-8 rounded-full" />
+            <img src="/logo.jpeg" alt="Ring Storm Sports" className="h-8 w-8 rounded-full" />
             <h1 className="text-2xl font-bold uppercase tracking-tight">Checkout</h1>
           </div>
           <div className="flex items-center gap-2 text-sm text-muted-foreground">

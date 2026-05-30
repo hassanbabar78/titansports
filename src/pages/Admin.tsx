@@ -361,7 +361,7 @@ const Admin = () => {
                     <input
                       value={form.brand}
                       onChange={e => updateForm('brand', e.target.value)}
-                      placeholder="e.g. Titan Sports"
+                      placeholder="e.g. Ring Storm Sports"
                       className={inputStyle}
                     />
                   </div>

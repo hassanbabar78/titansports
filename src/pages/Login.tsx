@@ -58,7 +58,7 @@ const Login = () => {
     <div className="min-h-[80vh] flex items-center justify-center px-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <img src="/logo.jpeg" alt="Titan Sports" className="h-16 w-16 rounded-full mx-auto mb-4" />
+          <img src="/logo.jpeg" alt="Ring Storm Sports" className="h-16 w-16 rounded-full mx-auto mb-4" />
           <h1 className="text-2xl font-bold uppercase">
             {isForgotPassword ? 'Reset Password' : isSignUp ? 'Create Account' : 'Sign In'}
           </h1>

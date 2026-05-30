@@ -6,7 +6,7 @@ const Privacy = () => (
     <div className="space-y-6 text-sm leading-relaxed">
       <section>
         <h2 className="text-xl font-bold text-gold mb-2">1. Information We Collect</h2>
-        <p>When you shop at Titan Sports we collect: your name, email address, shipping/billing address, phone number, and payment information necessary to process and ship physical boxing equipment to you.</p>
+        <p>When you shop at Ring Storm Sports we collect: your name, email address, shipping/billing address, phone number, and payment information necessary to process and ship physical boxing equipment to you.</p>
       </section>
       <section>
         <h2 className="text-xl font-bold text-gold mb-2">2. How We Use Your Information</h2>
@@ -22,11 +22,11 @@ const Privacy = () => (
       </section>
       <section>
         <h2 className="text-xl font-bold text-gold mb-2">5. Data Retention & Your Rights</h2>
-        <p>You may request access, correction, or deletion of your personal data at any time. Contact us at <span className="text-gold">support@titansports.com</span>.</p>
+        <p>You may request access, correction, or deletion of your personal data at any time. Contact us at <span className="text-gold">support@ringstormsports.com</span>.</p>
       </section>
       <section>
         <h2 className="text-xl font-bold text-gold mb-2">6. Contact</h2>
-        <p>For privacy questions, email <span className="text-gold">support@titansports.com</span>.</p>
+        <p>For privacy questions, email <span className="text-gold">support@ringstormsports.com</span>.</p>
       </section>
     </div>
   </div>

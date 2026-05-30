@@ -50,7 +50,7 @@ const ResetPassword = () => {
     return (
       <div className="min-h-[80vh] flex items-center justify-center px-4">
         <div className="w-full max-w-md text-center">
-          <img src="/logo.jpeg" alt="Titan Sports" className="h-16 w-16 rounded-full mx-auto mb-4" />
+          <img src="/logo.jpeg" alt="Ring Storm Sports" className="h-16 w-16 rounded-full mx-auto mb-4" />
           <h1 className="text-2xl font-bold uppercase mb-3">Waiting for Reset Link</h1>
           <p className="text-muted-foreground text-sm mb-6">
             Please click the password reset link sent to your email to continue.
@@ -70,7 +70,7 @@ const ResetPassword = () => {
     <div className="min-h-[80vh] flex items-center justify-center px-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <img src="/logo.jpeg" alt="Titan Sports" className="h-16 w-16 rounded-full mx-auto mb-4" />
+          <img src="/logo.jpeg" alt="Ring Storm Sports" className="h-16 w-16 rounded-full mx-auto mb-4" />
           <h1 className="text-2xl font-bold uppercase">Set New Password</h1>
           <p className="text-muted-foreground text-sm mt-2">Choose a strong new password.</p>
         </div>

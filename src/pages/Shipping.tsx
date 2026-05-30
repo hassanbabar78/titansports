@@ -2,7 +2,7 @@ const Shipping = () => (
   <div className="container mx-auto px-4 py-16 max-w-3xl">
     <h1 className="text-3xl font-bold uppercase tracking-tight mb-6">Shipping Policy</h1>
     <div className="space-y-6 text-sm leading-relaxed">
-      <p>Titan Sports ships <strong>physical boxing gloves and equipment</strong> worldwide. Every order is carefully packaged and dispatched from our warehouse.</p>
+      <p>Ring Storm Sports ships <strong>physical boxing gloves and equipment</strong> worldwide. Every order is carefully packaged and dispatched from our warehouse.</p>
       <section><h2 className="text-xl font-bold text-gold mb-2">Delivery Times</h2>
         <ul className="list-disc list-inside space-y-1">
           <li><strong>Standard International:</strong> 7–14 business days</li>

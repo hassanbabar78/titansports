@@ -345,7 +345,7 @@ const Contact = () => {
               </div>
               <div>
                 <p className="font-semibold">Email</p>
-                <p className="text-sm text-muted-foreground">support@titansports.com</p>
+                <p className="text-sm text-muted-foreground">support@ringstormsports.com</p>
                 <p className="text-xs text-muted-foreground/60 mt-1">We reply within 24 hours</p>
               </div>
             </div>
