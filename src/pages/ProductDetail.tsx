@@ -16,9 +16,6 @@ import { toast } from 'sonner';
 import { Skeleton } from '@/components/ui/skeleton';
 
 const weights = ['4oz', '6oz', '8oz', '10oz', '12oz', '14oz', '16oz', '18oz', '20oz'];
-const [reviewRating, setReviewRating] = useState(5);
-const [reviewComment, setReviewComment] = useState('');
-
 
 const sizeGuide = [
   { hand: '6"-7"', weight: '8oz-10oz', use: 'Speed work, cardio' },

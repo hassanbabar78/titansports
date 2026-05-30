@@ -10,13 +10,14 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 const GENDER_FILTERS = ['men', 'women'];
 
-  useEffect(() => {
-  document.title = "Shop Boxing Gloves | Ring Storm Sports";
-}, []);
-
+ 
 const Shop = () => {
 
  
+   useEffect(() => {
+    document.title = "Shop Boxing Gloves | Ring Storm Sports";
+  }, []);
+
   const [searchParams] = useSearchParams();
   const initialCategory = searchParams.get('category') || '';
   const [sortBy, setSortBy] = useState('newest');
