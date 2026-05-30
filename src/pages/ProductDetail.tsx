@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Star, Minus, Plus, ShoppingBag, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useCart } from '@/contexts/CartContext';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ProductCard from '@/components/ProductCard';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useAuth } from '@/contexts/AuthContext';
@@ -16,6 +16,9 @@ import { toast } from 'sonner';
 import { Skeleton } from '@/components/ui/skeleton';
 
 const weights = ['4oz', '6oz', '8oz', '10oz', '12oz', '14oz', '16oz', '18oz', '20oz'];
+const [reviewRating, setReviewRating] = useState(5);
+const [reviewComment, setReviewComment] = useState('');
+
 
 const sizeGuide = [
   { hand: '6"-7"', weight: '8oz-10oz', use: 'Speed work, cardio' },
@@ -35,6 +38,8 @@ const ProductDetail = () => {
   
   const [reviewRating, setReviewRating] = useState(5);
   const [reviewComment, setReviewComment] = useState('');
+
+  
 
   const submitReview = useMutation({
     mutationFn: async () => {
@@ -102,6 +107,45 @@ const ProductDetail = () => {
 
   const images = [product.image_url, ...(product.images || [])].filter(Boolean);
   const price = product.sale_price || product.price;
+
+  useEffect(() => {
+    if (product) {
+      document.title = `${product.name} | Ring Storm Sports`;
+    }
+    return () => {
+      document.title = 'Ring Storm Sports | Premium Boxing Gloves & Equipment';
+    };
+  }, [product]);
+
+  useEffect(() => {
+    if (!product) return;
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.text = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": product.name,
+      "description": product.description,
+      "image": product.image_url,
+      "brand": { "@type": "Brand", "name": "Ring Storm Sports" },
+      "offers": {
+        "@type": "Offer",
+        "price": product.sale_price || product.price,
+        "priceCurrency": "USD",
+        "availability": product.in_stock
+          ? "https://schema.org/InStock"
+          : "https://schema.org/OutOfStock",
+        "url": `https://www.ringstormsports.com/product/${product.id}`
+      },
+      "aggregateRating": product.review_count > 0 ? {
+        "@type": "AggregateRating",
+        "ratingValue": product.rating,
+        "reviewCount": product.review_count
+      } : undefined
+    });
+    document.head.appendChild(script);
+    return () => { document.head.removeChild(script); };
+  }, [product]);
 
   return (
     <div className="container mx-auto px-4 py-8">
