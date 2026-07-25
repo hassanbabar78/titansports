@@ -1,4 +1,4 @@
-# Titan Sports
+# Ring Storm Sports
 
 A modern and responsive e-commerce web application built for sports and fitness products. The project is developed using React, TypeScript, Vite, Tailwind CSS, and Supabase, providing a fast, scalable, and production-ready shopping experience.
 
